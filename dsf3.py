@@ -23,11 +23,15 @@ df_seoul_pop = df_seoul_pop.reset_index(drop=True)
 df_seoul_pop['행정구역별_행정구역별'] = df_seoul_pop['행정구역별_행정구역별'].str.strip()
 
 # 3. shp 데이터 로드 및 전처리
-
-gdf = gpd.read_file("N3A_G0100000.fgb")
+@st.cache_data
+def read_fgb(file):
+    gdf = gpd.read_file(file)
+    return gdf    
+gdf=read_fgb("N3A_G0100000.fgb")
 gdf.rename(columns={'NAME': '행정구역별_행정구역별'}, inplace=True)
 
 # 중복된 행정구역 처리 함수
+
 def modify_district_name(row, duplicated_names):
     if row['행정구역별_행정구역별'] in duplicated_names:
         bjcd_prefix = str(row['BJCD'])[:2]
@@ -69,4 +73,5 @@ folium.Choropleth(
 ).add_to(nation_map)
 
 # 5. Streamlit에서 Folium 지도 렌더링
+
 st_folium(nation_map, width=800, height=600)
