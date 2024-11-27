@@ -74,4 +74,4 @@ folium.Choropleth(
 
 # 5. Streamlit에서 Folium 지도 렌더링
 
-st_folium(nation_map, width=800, height=600)
+st_folium(nation_map, width=800, height=600,returned_objects=[])
